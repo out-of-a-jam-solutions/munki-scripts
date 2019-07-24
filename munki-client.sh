@@ -1,8 +1,8 @@
 #! /bin/bash
 
 # environment
-MUNKI_PKG=munkitools-VERSION.pkg
-SERVER_HOST="http://IP_ADDRESS/munki_repo"
+MUNKI_PKG=$1
+SERVER_HOST="$2"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"  # https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
 
 # install munki tools
@@ -17,8 +17,20 @@ sudo defaults write /Library/Preferences/ManagedInstalls SoftwareRepoURL $SERVER
 echo "ManagedInstalls preference is:"
 sudo defaults read /Library/Preferences/ManagedInstalls
 
+# copy the conditional install scripts
+sudo mkdir /usr/local/munki/conditions
+sudo cp $DIR/check-10.13-highsierra-compatibility.py /usr/local/munki/conditions/check-10.13-highsierra-compatibility.py
+sudo cp $DIR/check-10.14-mojave-compatibility.py /usr/local/munki/conditions/check-10.14-mojave-compatibility.py
+
+# set the conditional script permissions
+sudo chown root:wheel /usr/local/munki/conditions/*
+sudo chmod +x /usr/local/munki/conditions/*
+
+# create the munki bootstrap file
+touch /Users/Shared/.com.googlecode.munki.checkandinstallatstartup
+
 # sleep for 5 seconds
-echo "restarting in 10 seconds..."
+echo "restarting in 5 seconds..."
 sleep 5
 
 # restart the computer
