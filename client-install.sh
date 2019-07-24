@@ -1,5 +1,11 @@
 #! /bin/bash
 
+#################
+### ARGUMENTS ###
+#################
+# 1) munki installer package existing in the same directory as the install script, ex. munkitools-3.6.2.3776.pkg
+# 2) munki repository URL, ex. http://10.0.1.1/munki_repo
+
 # environment
 MUNKI_PKG=$1
 SERVER_HOST="$2"
